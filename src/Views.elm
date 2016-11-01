@@ -1,14 +1,14 @@
 module Views exposing (..)
 
+import Fields.Models exposing (..)
+import Fields.Views exposing (fieldView)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Models exposing (Model)
-import Messages exposing (..)
-import Fields.Views exposing (fieldView)
-import Fields.Models exposing (..)
-import Regex exposing (..)
 import Json.Decode
+import Messages exposing (..)
+import Models exposing (Model)
+import Regex exposing (..)
 import String exposing (toLower)
 
 
@@ -42,14 +42,14 @@ view model =
             [ div [ class "panel panel-info" ]
                 [ div [ class "panel-heading" ] [ text "Application state" ]
                 , div [ class "panel-body" ]
-                    [ pre [] [ text (jsonPretty (toString model)) ] ]
+                    [ pre [] [ text (jsonPsuedoPretty (toString model)) ] ]
                 ]
             ]
         ]
 
 
-jsonPretty : String -> String
-jsonPretty text =
+jsonPsuedoPretty : String -> String
+jsonPsuedoPretty text =
     text
         |> replace All (regex "[,]") (\_ -> ",\n")
         |> replace All (regex "[\\[]") (\_ -> "[\n")
@@ -170,7 +170,7 @@ activeFieldForm field =
                 , type' "checkbox"
                 , name "required"
                 , checked field.required
-                , onClick (ToggleRequired field)
+                , onClick (UpdateField (\f v -> { f | required = not f.required }) field "")
                 ]
                 []
             ]
@@ -206,7 +206,7 @@ activeFieldForm field =
                 , type' "checkbox"
                 , name "readOnly"
                 , checked field.readOnly
-                , onClick (ToggleReadOnly field)
+                , onClick (UpdateField (\f v -> { f | readOnly = not f.readOnly }) field "")
                 ]
                 []
             ]

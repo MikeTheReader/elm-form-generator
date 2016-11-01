@@ -53,46 +53,24 @@ update msg model =
             , Cmd.none
             )
 
-        Messages.ToggleRequired changedField ->
-            ( { model
-                | fields =
-                    List.map
-                        (\field ->
-                            if field.id == changedField.id then
-                                { field
-                                    | required = not field.required
-                                }
-                            else
-                                field
-                        )
-                        model.fields
-              }
-            , Cmd.none
-            )
-
-        Messages.ToggleReadOnly changedField ->
-            ( { model
-                | fields =
-                    List.map
-                        (\field ->
-                            if field.id == changedField.id then
-                                { field
-                                    | readOnly = not field.readOnly
-                                }
-                            else
-                                field
-                        )
-                        model.fields
-              }
-            , Cmd.none
-            )
-
         Messages.DeleteField field ->
             ( { model
                 | fields = List.filter (\f -> f.id /= field.id) model.fields
               }
             , Cmd.none
             )
+
+        Messages.FetchFieldsSucceed fieldList ->
+            Debug.log ("FetchSucceed " ++ (toString fieldList))
+                ( { model
+                    | fields = fieldList
+                  }
+                , Cmd.none
+                )
+
+        Messages.FetchFieldsFail error ->
+            Debug.log (toString error)
+                ( model, Cmd.none )
 
         _ ->
             ( model, Cmd.none )

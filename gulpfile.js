@@ -13,7 +13,7 @@ clear();
 gulp.task('default', ['server', 'watch', 'elm']);
 
 gulp.task('watch', function(cb) {
-    gulp.watch('**/*.elm', ['elm']);
+    gulp.watch('**/**/*.elm', ['elm']);
 });
 
 gulp.task('server', function(done) {

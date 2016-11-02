@@ -115,122 +115,124 @@ machineName label =
 
 activeFieldForm : Field -> Html Msg
 activeFieldForm field =
-    Html.form []
-        [ div [ class "form-group" ]
-            [ input [ class "form-control", type' "hidden", name "id", value (toString field.id) ] []
-            ]
-        , div [ class "form-group" ]
-            [ label [] [ text "Label" ]
-            , input
-                [ class "form-control"
-                , type' "text"
-                , name "label"
-                , value field.label
-                , onInput (UpdateField (\f v -> { f | label = v, name = (machineName v) }) field)
+    div []
+        [ Html.form []
+            [ div [ class "form-group" ]
+                [ input [ class "form-control", type' "hidden", name "id", value (toString field.id) ] []
                 ]
-                []
-            ]
-        , div [ class "form-group" ]
-            [ label [] [ text "Machine Readable Name" ]
-            , input
-                [ class "form-control"
-                , type' "text"
-                , name "name"
-                , value field.name
-                , readonly True
+            , div [ class "form-group" ]
+                [ label [] [ text "Label" ]
+                , input
+                    [ class "form-control"
+                    , type' "text"
+                    , name "label"
+                    , value field.label
+                    , onInput (UpdateField (\f v -> { f | label = v, name = (machineName v) }) field)
+                    ]
+                    []
                 ]
-                []
-            ]
-        , div [ class "form-group" ]
-            [ label [] [ text "Description" ]
-            , input
-                [ class "form-control"
-                , type' "text"
-                , name "description"
-                , value field.description
-                , onInput (UpdateField (\f v -> { f | description = v }) field)
+            , div [ class "form-group" ]
+                [ label [] [ text "Machine Readable Name" ]
+                , input
+                    [ class "form-control"
+                    , type' "text"
+                    , name "name"
+                    , value field.name
+                    , readonly True
+                    ]
+                    []
                 ]
-                []
-            ]
-        , div [ class "form-group" ]
-            [ label [] [ text "Instructions" ]
-            , input
-                [ class "form-control"
-                , type' "text"
-                , name "instructions"
-                , value field.instructions
-                , onInput (UpdateField (\f v -> { f | instructions = v }) field)
+            , div [ class "form-group" ]
+                [ label [] [ text "Description" ]
+                , input
+                    [ class "form-control"
+                    , type' "text"
+                    , name "description"
+                    , value field.description
+                    , onInput (UpdateField (\f v -> { f | description = v }) field)
+                    ]
+                    []
                 ]
-                []
-            ]
-        , div [ class "form-group" ]
-            [ label [] [ text "Required" ]
-            , input
-                [ class "form-control"
-                , type' "checkbox"
-                , name "required"
-                , checked field.required
-                , onClick (UpdateField (\f v -> { f | required = not f.required }) field "")
+            , div [ class "form-group" ]
+                [ label [] [ text "Instructions" ]
+                , input
+                    [ class "form-control"
+                    , type' "text"
+                    , name "instructions"
+                    , value field.instructions
+                    , onInput (UpdateField (\f v -> { f | instructions = v }) field)
+                    ]
+                    []
                 ]
-                []
-            ]
-        , div [ class "form-group" ]
-            [ label [] [ text "Type" ]
-            , select
-                [ class "form-control"
-                , name "type"
-                , value (typeToValue field.type')
-                , on "change" (Json.Decode.map (UpdateType field) targetValueTypeDecoder)
+            , div [ class "form-group" ]
+                [ label [] [ text "Required" ]
+                , input
+                    [ class "form-control"
+                    , type' "checkbox"
+                    , name "required"
+                    , checked field.required
+                    , onClick (UpdateField (\f v -> { f | required = not f.required }) field "")
+                    ]
+                    []
                 ]
-                [ typeOption TextField
-                , typeOption NumberField
-                , typeOption DateField
-                , typeOption BooleanField
+            , div [ class "form-group" ]
+                [ label [] [ text "Type" ]
+                , select
+                    [ class "form-control"
+                    , name "type"
+                    , value (typeToValue field.type')
+                    , on "change" (Json.Decode.map (UpdateType field) targetValueTypeDecoder)
+                    ]
+                    [ typeOption TextField
+                    , typeOption NumberField
+                    , typeOption DateField
+                    , typeOption BooleanField
+                    ]
                 ]
-            ]
-        , div [ class "form-group" ]
-            [ label [] [ text "Default Value" ]
-            , input
-                [ class "form-control"
-                , type' "text"
-                , name "defaultValue"
-                , value (Maybe.withDefault "" field.defaultValue)
-                , onInput (UpdateField (\f v -> { f | defaultValue = Just v }) field)
+            , div [ class "form-group" ]
+                [ label [] [ text "Default Value" ]
+                , input
+                    [ class "form-control"
+                    , type' "text"
+                    , name "defaultValue"
+                    , value (Maybe.withDefault "" field.defaultValue)
+                    , onInput (UpdateField (\f v -> { f | defaultValue = Just v }) field)
+                    ]
+                    []
                 ]
-                []
-            ]
-        , div [ class "form-group" ]
-            [ label [] [ text "Read Only" ]
-            , input
-                [ class "form-control"
-                , type' "checkbox"
-                , name "readOnly"
-                , checked field.readOnly
-                , onClick (UpdateField (\f v -> { f | readOnly = not f.readOnly }) field "")
+            , div [ class "form-group" ]
+                [ label [] [ text "Read Only" ]
+                , input
+                    [ class "form-control"
+                    , type' "checkbox"
+                    , name "readOnly"
+                    , checked field.readOnly
+                    , onClick (UpdateField (\f v -> { f | readOnly = not f.readOnly }) field "")
+                    ]
+                    []
                 ]
-                []
-            ]
-        , div [ class "form-group" ]
-            [ label [] [ text "Minimum Value" ]
-            , input
-                [ class "form-control"
-                , type' "text"
-                , name "min"
-                , value (Maybe.withDefault "" field.min)
-                , onInput (UpdateField (\f v -> { f | min = Just v }) field)
+            , div [ class "form-group" ]
+                [ label [] [ text "Minimum Value" ]
+                , input
+                    [ class "form-control"
+                    , type' "text"
+                    , name "min"
+                    , value (Maybe.withDefault "" field.min)
+                    , onInput (UpdateField (\f v -> { f | min = Just v }) field)
+                    ]
+                    []
                 ]
-                []
-            ]
-        , div [ class "form-group" ]
-            [ label [] [ text "Maximum Value" ]
-            , input
-                [ class "form-control"
-                , type' "text"
-                , name "max"
-                , value (Maybe.withDefault "" field.max)
-                , onInput (UpdateField (\f v -> { f | max = Just v }) field)
+            , div [ class "form-group" ]
+                [ label [] [ text "Maximum Value" ]
+                , input
+                    [ class "form-control"
+                    , type' "text"
+                    , name "max"
+                    , value (Maybe.withDefault "" field.max)
+                    , onInput (UpdateField (\f v -> { f | max = Just v }) field)
+                    ]
+                    []
                 ]
-                []
             ]
         , div [ class "form-group" ]
             [ button [ class "btn btn-primary pull-right", onClick Cancel ] [ text "Cancel" ]

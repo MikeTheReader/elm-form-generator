@@ -1,6 +1,6 @@
 module Update exposing (..)
 
-import Models exposing (Model)
+import Models exposing (Model, dummyFields)
 import Messages exposing (Msg)
 import Fields.Models exposing (Field, FieldType(TextField))
 
@@ -61,16 +61,15 @@ update msg model =
             )
 
         Messages.FetchFieldsSucceed fieldList ->
-            Debug.log ("FetchSucceed " ++ (toString fieldList))
-                ( { model
-                    | fields = fieldList
-                  }
-                , Cmd.none
-                )
+            ( { model
+                | fields = fieldList
+              }
+            , Cmd.none
+            )
 
         Messages.FetchFieldsFail error ->
-            Debug.log (toString error)
-                ( model, Cmd.none )
+            Debug.log ((toString error) ++ " Using Dummy Fields")
+                ( { model | fields = dummyFields }, Cmd.none )
 
         _ ->
             ( model, Cmd.none )

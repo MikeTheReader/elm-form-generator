@@ -43,6 +43,7 @@ There are some things that I haven't fully hooked up, yet, too:
 * Having the minimum/maximum be the correct field type
 * Having the default value be the correct field type
 * Using a fancy UI component for the Boolean Field presentation (thinking toggle rather than a checkbox)
+* Adding Field Form validation
 
 ## Thanks
 

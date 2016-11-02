@@ -1,4 +1,4 @@
-module Update exposing (..)
+port module Update exposing (..)
 
 import Models exposing (Model, dummyFields)
 import Messages exposing (Msg)
@@ -71,6 +71,13 @@ update msg model =
             Debug.log ((toString error) ++ " Using Dummy Fields")
                 ( { model | fields = dummyFields }, Cmd.none )
 
+        Messages.PortCheck ->
+            ( model, portCheck "testing 1 2 3" )
+
+        Messages.PortCount num ->
+            Debug.log ("Got a count back into Elm: " ++ (toString num))
+                ( model, Cmd.none )
+
         _ ->
             ( model, Cmd.none )
 
@@ -90,3 +97,13 @@ newField model =
     , min = Nothing
     , max = Nothing
     }
+
+
+
+-- These are experiments with ports
+
+
+port portCheck : String -> Cmd msg
+
+
+port portCount : (Int -> msg) -> Sub msg

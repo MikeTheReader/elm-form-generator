@@ -39,7 +39,13 @@ view model =
                 ]
             ]
         , div [ class "col-md-4" ]
-            [ div [ class "panel panel-info" ]
+            [ button
+                [ class "btn btn-danger"
+                , onClick PortCheck
+                , style [ ( "margin-bottom", "10px" ) ]
+                ]
+                [ text "Test Port (See console)" ]
+            , div [ class "panel panel-info" ]
                 [ div [ class "panel-heading" ] [ text "Application state" ]
                 , div [ class "panel-body" ]
                     [ pre [] [ text (jsonPsuedoPretty (toString model)) ] ]

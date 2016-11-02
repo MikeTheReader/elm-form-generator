@@ -36,6 +36,14 @@ I will be adding more comments to the code, and probably restructuring
 it here soon. This is a learning project, so I'm sure there are some
 inefficiencies in code use. If you see some, let me know.
 
+There are some things that I haven't fully hooked up, yet, too:
+
+* Being able to specify a list of options for a field
+* Having the minimum/maximum only show up when appropriate
+* Having the minimum/maximum be the correct field type
+* Having the default value be the correct field type
+* Using a fancy UI component for the Boolean Field presentation (thinking toggle rather than a checkbox)
+
 ## Thanks
 
 Thanks to the folks at http://elmlang.slack.com for helping me when I

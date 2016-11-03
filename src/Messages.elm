@@ -1,6 +1,6 @@
 module Messages exposing (..)
 
-import Fields.Models exposing (Field, FieldType)
+import Fields.Models exposing (Field, FieldType, FieldProperty)
 import Http exposing (Error)
 
 
@@ -10,7 +10,7 @@ type Msg
     | DeleteField Field
     | SaveField
     | Cancel
-    | UpdateField (Field -> String -> Field) Field String
+    | UpdateField Field FieldProperty
     | UpdateType Field FieldType
     | FetchFieldsFail Http.Error
     | FetchFieldsSucceed (List Field)

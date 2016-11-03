@@ -9,7 +9,6 @@ import Json.Decode
 import Messages exposing (..)
 import Models exposing (Model)
 import Regex exposing (..)
-import String exposing (toLower)
 
 
 view : Model -> Html Msg
@@ -114,11 +113,6 @@ typeToValue type' =
             "boolean"
 
 
-machineName : String -> String
-machineName label =
-    replace All (regex "[\\W]") (\_ -> "_") (toLower label)
-
-
 activeFieldForm : Field -> Html Msg
 activeFieldForm field =
     div []
@@ -133,7 +127,7 @@ activeFieldForm field =
                     , type' "text"
                     , name "label"
                     , value field.label
-                    , onInput (UpdateField (\f v -> { f | label = v, name = (machineName v) }) field)
+                    , onInput (UpdateField field << Label)
                     ]
                     []
                 ]
@@ -155,7 +149,7 @@ activeFieldForm field =
                     , type' "text"
                     , name "description"
                     , value field.description
-                    , onInput (UpdateField (\f v -> { f | description = v }) field)
+                    , onInput (UpdateField field << Description)
                     ]
                     []
                 ]
@@ -166,7 +160,7 @@ activeFieldForm field =
                     , type' "text"
                     , name "instructions"
                     , value field.instructions
-                    , onInput (UpdateField (\f v -> { f | instructions = v }) field)
+                    , onInput (UpdateField field << Instructions)
                     ]
                     []
                 ]
@@ -177,7 +171,7 @@ activeFieldForm field =
                     , type' "checkbox"
                     , name "required"
                     , checked field.required
-                    , onClick (UpdateField (\f v -> { f | required = not f.required }) field "")
+                    , onClick (UpdateField field (Required (not field.required)))
                     ]
                     []
                 ]
@@ -202,7 +196,7 @@ activeFieldForm field =
                     , type' "text"
                     , name "defaultValue"
                     , value (Maybe.withDefault "" field.defaultValue)
-                    , onInput (UpdateField (\f v -> { f | defaultValue = Just v }) field)
+                    , onInput (UpdateField field << DefaultValue << Just)
                     ]
                     []
                 ]
@@ -213,7 +207,7 @@ activeFieldForm field =
                     , type' "checkbox"
                     , name "readOnly"
                     , checked field.readOnly
-                    , onClick (UpdateField (\f v -> { f | readOnly = not f.readOnly }) field "")
+                    , onClick (UpdateField field (ReadOnly (not field.readOnly)))
                     ]
                     []
                 ]
@@ -224,7 +218,7 @@ activeFieldForm field =
                     , type' "text"
                     , name "min"
                     , value (Maybe.withDefault "" field.min)
-                    , onInput (UpdateField (\f v -> { f | min = Just v }) field)
+                    , onInput (UpdateField field << Min << Just)
                     ]
                     []
                 ]
@@ -235,7 +229,7 @@ activeFieldForm field =
                     , type' "text"
                     , name "max"
                     , value (Maybe.withDefault "" field.max)
-                    , onInput (UpdateField (\f v -> { f | max = Just v }) field)
+                    , onInput (UpdateField field << Max << Just)
                     ]
                     []
                 ]

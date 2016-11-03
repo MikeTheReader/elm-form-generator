@@ -2,7 +2,9 @@ port module Update exposing (..)
 
 import Models exposing (Model, dummyFields)
 import Messages exposing (Msg)
-import Fields.Models exposing (Field, FieldType(TextField))
+import Fields.Models exposing (..)
+import Regex exposing (..)
+import String exposing (toLower)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -21,13 +23,13 @@ update msg model =
         Messages.Cancel ->
             ( { model | activeFieldId = Nothing }, Cmd.none )
 
-        Messages.UpdateField updateOperation changedField value ->
+        Messages.UpdateField changedField property ->
             ( { model
                 | fields =
                     List.map
                         (\field ->
                             if field.id == changedField.id then
-                                updateOperation field value
+                                updateFieldProperty changedField property
                             else
                                 field
                         )
@@ -80,6 +82,45 @@ update msg model =
 
         _ ->
             ( model, Cmd.none )
+
+
+updateFieldProperty : Field -> FieldProperty -> Field
+updateFieldProperty field property =
+    case property of
+        Label label ->
+            { field | label = label, name = (machineName label) }
+
+        Description description ->
+            { field | description = description }
+
+        Instructions instructions ->
+            { field | instructions = instructions }
+
+        Type theType ->
+            { field | type' = theType }
+
+        AllowAdditionalOptions allow ->
+            { field | allowAdditionalOptions = allow }
+
+        DefaultValue value ->
+            { field | defaultValue = value }
+
+        ReadOnly readonly ->
+            { field | readOnly = readonly }
+
+        Required required ->
+            { field | required = required }
+
+        Min min ->
+            { field | min = min }
+
+        Max max ->
+            { field | max = max }
+
+
+machineName : String -> String
+machineName label =
+    replace All (regex "[\\W]") (\_ -> "_") (toLower label)
 
 
 newField : Model -> Fields.Models.Field

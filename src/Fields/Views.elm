@@ -26,7 +26,7 @@ fieldView activeId field =
 
 fieldSubView : Field -> Html Msg
 fieldSubView field =
-    case field.type' of
+    case field.type_ of
         TextField ->
             textFieldView field
 
@@ -46,7 +46,7 @@ textFieldView field =
         [ label [] [ text field.label ]
         , div []
             [ input
-                [ type' "text"
+                [ type_ "text"
                 , class "form-control"
                 , placeholder field.description
                 , readonly field.readOnly
@@ -63,7 +63,7 @@ numberFieldView field =
         [ label [] [ text field.label ]
         , div []
             [ input
-                [ type' "number"
+                [ type_ "number"
                 , class "form-control"
                 , placeholder field.description
                 , readonly field.readOnly
@@ -82,7 +82,7 @@ dateFieldView field =
         [ label [] [ text field.label ]
         , div []
             [ input
-                [ type' "date"
+                [ type_ "date"
                 , class "form-control"
                 , placeholder field.description
                 , readonly field.readOnly
@@ -101,7 +101,7 @@ booleanFieldView field =
         [ label [] [ text field.label ]
         , div []
             [ input
-                [ type' "checkbox"
+                [ type_ "checkbox"
                 , class "form-control"
                 , placeholder field.description
                 , readonly field.readOnly

@@ -45,7 +45,7 @@ update msg model =
                         (\field ->
                             if field.id == changedField.id then
                                 { field
-                                    | type' = fieldType
+                                    | type_ = fieldType
                                 }
                             else
                                 field
@@ -62,23 +62,16 @@ update msg model =
             , Cmd.none
             )
 
-        Messages.FetchFieldsSucceed fieldList ->
+        Messages.FetchFields (Ok fieldList) ->
             ( { model
                 | fields = fieldList
               }
             , Cmd.none
             )
 
-        Messages.FetchFieldsFail error ->
+        Messages.FetchFields (Err error) ->
             Debug.log ((toString error) ++ " Using Dummy Fields")
                 ( { model | fields = dummyFields }, Cmd.none )
-
-        Messages.PortCheck ->
-            ( model, portCheck "testing 1 2 3" )
-
-        Messages.PortCount num ->
-            Debug.log ("Got a count back into Elm: " ++ (toString num))
-                ( model, Cmd.none )
 
         _ ->
             ( model, Cmd.none )
@@ -94,10 +87,10 @@ updateFieldProperty field property =
             { field | description = description }
 
         Instructions instructions ->
-            { field | instructions = instructions }
+            { field | instructions = Just instructions }
 
         Type theType ->
-            { field | type' = theType }
+            { field | type_ = theType }
 
         AllowAdditionalOptions allow ->
             { field | allowAdditionalOptions = allow }
@@ -129,8 +122,8 @@ newField model =
     , label = "< New Field >"
     , name = "__new_field__"
     , description = "Add Description"
-    , instructions = "Add Instructions"
-    , type' = Fields.Models.TextField
+    , instructions = Just "Add Instructions"
+    , type_ = Fields.Models.TextField
     , allowAdditionalOptions = True
     , defaultValue = Nothing
     , readOnly = False
@@ -138,13 +131,3 @@ newField model =
     , min = Nothing
     , max = Nothing
     }
-
-
-
--- These are experiments with ports
-
-
-port portCheck : String -> Cmd msg
-
-
-port portCount : (Int -> msg) -> Sub msg

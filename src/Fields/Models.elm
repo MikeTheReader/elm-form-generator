@@ -13,8 +13,8 @@ type alias Field =
     , label : String
     , name : String
     , description : String
-    , instructions : String
-    , type' : FieldType
+    , instructions : Maybe String
+    , type_ : FieldType
     , allowAdditionalOptions : Bool
     , defaultValue : Maybe String
     , readOnly : Bool

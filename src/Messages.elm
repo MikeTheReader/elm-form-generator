@@ -12,7 +12,4 @@ type Msg
     | Cancel
     | UpdateField Field FieldProperty
     | UpdateType Field FieldType
-    | FetchFieldsFail Http.Error
-    | FetchFieldsSucceed (List Field)
-    | PortCheck
-    | PortCount Int
+    | FetchFields (Result Http.Error (List Field))

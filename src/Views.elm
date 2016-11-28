@@ -38,13 +38,7 @@ view model =
                 ]
             ]
         , div [ class "col-md-4" ]
-            [ button
-                [ class "btn btn-danger"
-                , onClick PortCheck
-                , style [ ( "margin-bottom", "10px" ) ]
-                ]
-                [ text "Test Port (See console)" ]
-            , div [ class "panel panel-info" ]
+            [ div [ class "panel panel-info" ]
                 [ div [ class "panel-heading" ] [ text "Application state" ]
                 , div [ class "panel-body" ]
                     [ pre [] [ text (jsonPsuedoPretty (toString model)) ] ]
@@ -82,8 +76,8 @@ fieldForm model =
 
 
 typeOption : FieldType -> Html Msg
-typeOption type' =
-    case type' of
+typeOption type_ =
+    case type_ of
         TextField ->
             option [ value "text" ] [ text "Text" ]
 
@@ -98,8 +92,8 @@ typeOption type' =
 
 
 typeToValue : FieldType -> String
-typeToValue type' =
-    case type' of
+typeToValue type_ =
+    case type_ of
         TextField ->
             "text"
 
@@ -118,13 +112,13 @@ activeFieldForm field =
     div []
         [ Html.form []
             [ div [ class "form-group" ]
-                [ input [ class "form-control", type' "hidden", name "id", value (toString field.id) ] []
+                [ input [ class "form-control", type_ "hidden", name "id", value (toString field.id) ] []
                 ]
             , div [ class "form-group" ]
                 [ label [] [ text "Label" ]
                 , input
                     [ class "form-control"
-                    , type' "text"
+                    , type_ "text"
                     , name "label"
                     , value field.label
                     , onInput (UpdateField field << Label)
@@ -135,7 +129,7 @@ activeFieldForm field =
                 [ label [] [ text "Machine Readable Name" ]
                 , input
                     [ class "form-control"
-                    , type' "text"
+                    , type_ "text"
                     , name "name"
                     , value field.name
                     , readonly True
@@ -146,7 +140,7 @@ activeFieldForm field =
                 [ label [] [ text "Description" ]
                 , input
                     [ class "form-control"
-                    , type' "text"
+                    , type_ "text"
                     , name "description"
                     , value field.description
                     , onInput (UpdateField field << Description)
@@ -157,9 +151,9 @@ activeFieldForm field =
                 [ label [] [ text "Instructions" ]
                 , input
                     [ class "form-control"
-                    , type' "text"
+                    , type_ "text"
                     , name "instructions"
-                    , value field.instructions
+                    , value (Maybe.withDefault "" field.instructions)
                     , onInput (UpdateField field << Instructions)
                     ]
                     []
@@ -168,7 +162,7 @@ activeFieldForm field =
                 [ label [] [ text "Required" ]
                 , input
                     [ class "form-control"
-                    , type' "checkbox"
+                    , type_ "checkbox"
                     , name "required"
                     , checked field.required
                     , onClick (UpdateField field (Required (not field.required)))
@@ -180,7 +174,7 @@ activeFieldForm field =
                 , select
                     [ class "form-control"
                     , name "type"
-                    , value (typeToValue field.type')
+                    , value (typeToValue field.type_)
                     , on "change" (Json.Decode.map (UpdateType field) targetValueTypeDecoder)
                     ]
                     [ typeOption TextField
@@ -193,7 +187,7 @@ activeFieldForm field =
                 [ label [] [ text "Default Value" ]
                 , input
                     [ class "form-control"
-                    , type' "text"
+                    , type_ "text"
                     , name "defaultValue"
                     , value (Maybe.withDefault "" field.defaultValue)
                     , onInput (UpdateField field << DefaultValue << Just)
@@ -204,7 +198,7 @@ activeFieldForm field =
                 [ label [] [ text "Read Only" ]
                 , input
                     [ class "form-control"
-                    , type' "checkbox"
+                    , type_ "checkbox"
                     , name "readOnly"
                     , checked field.readOnly
                     , onClick (UpdateField field (ReadOnly (not field.readOnly)))
@@ -215,7 +209,7 @@ activeFieldForm field =
                 [ label [] [ text "Minimum Value" ]
                 , input
                     [ class "form-control"
-                    , type' "text"
+                    , type_ "text"
                     , name "min"
                     , value (Maybe.withDefault "" field.min)
                     , onInput (UpdateField field << Min << Just)
@@ -226,7 +220,7 @@ activeFieldForm field =
                 [ label [] [ text "Maximum Value" ]
                 , input
                     [ class "form-control"
-                    , type' "text"
+                    , type_ "text"
                     , name "max"
                     , value (Maybe.withDefault "" field.max)
                     , onInput (UpdateField field << Max << Just)
@@ -244,8 +238,8 @@ activeFieldForm field =
 targetValueTypeDecoder : Json.Decode.Decoder FieldType
 targetValueTypeDecoder =
     targetValue
-        `Json.Decode.andThen`
-            \val ->
+        |> Json.Decode.andThen
+            (\val ->
                 case val of
                     "text" ->
                         Json.Decode.succeed TextField
@@ -261,3 +255,4 @@ targetValueTypeDecoder =
 
                     _ ->
                         Json.Decode.fail ("Invalid Role: " ++ val)
+            )

@@ -14,13 +14,6 @@
     <script src="dist/bundle.js"></script>
     <script>
         var app = Elm.Main.embed(document.getElementById("app"));
-
-        var count = 0;
-        app.ports.portCheck.subscribe(function(message) {
-            count++;
-            console.log("This is a port: ", message, count)
-            app.ports.portCount.send(count);
-        })
     </script>
 </body>
 

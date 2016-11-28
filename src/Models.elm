@@ -1,11 +1,10 @@
 module Models exposing (..)
 
-import Messages exposing (Msg, Msg(FetchFieldsFail, FetchFieldsSucceed))
+import Messages exposing (Msg, Msg(FetchFields))
 import Fields.Models exposing (Field, FieldType, FieldType(TextField, NumberField, BooleanField, DateField))
-import Task exposing (perform)
 import Http exposing (get)
-import Json.Decode exposing (int, string, bool, list, Decoder, succeed, map)
-import Json.Decode.Pipeline exposing (required, decode, hardcoded, nullable, optional, custom)
+import Json.Decode exposing (int, string, bool, list, Decoder, succeed, map, nullable)
+import Json.Decode.Pipeline exposing (required, decode, hardcoded, optional, custom)
 
 
 type alias Model =
@@ -28,9 +27,9 @@ initFields : Cmd Msg
 initFields =
     let
         url =
-            "//puffin.corvallis.consbio.org:8001/fields/fields"
+            "//puffin.corvallis.consbio.org:8000/fields/fields"
     in
-        Task.perform FetchFieldsFail FetchFieldsSucceed (get decodeFields url)
+        Http.send FetchFields (Http.get url decodeFields)
 
 
 decodeFields : Decoder (List Field)
@@ -45,7 +44,7 @@ decodeSingleField =
         |> required "label" string
         |> required "name" string
         |> required "description" string
-        |> required "instructions" string
+        |> required "instructions" (nullable string)
         |> required "type" (map calcFieldType string)
         |> required "allow_additional_options" bool
         |> required "default_value" (nullable string)
@@ -86,8 +85,8 @@ dummyFields =
       , label = "Text Field"
       , name = "text_field"
       , description = "Field One Description"
-      , instructions = "Field One Description"
-      , type' = TextField
+      , instructions = Just "Field One Description"
+      , type_ = TextField
       , allowAdditionalOptions = True
       , defaultValue = Nothing
       , readOnly = False
@@ -99,8 +98,8 @@ dummyFields =
       , label = "Number Field"
       , name = "number_field"
       , description = "Field Two Description"
-      , instructions = "Field Two Description"
-      , type' = NumberField
+      , instructions = Just "Field Two Description"
+      , type_ = NumberField
       , allowAdditionalOptions = True
       , defaultValue = Nothing
       , readOnly = False
@@ -112,8 +111,8 @@ dummyFields =
       , label = "Date Field"
       , name = "date_field"
       , description = "Field Three Description"
-      , instructions = "Field Three Description"
-      , type' = DateField
+      , instructions = Just "Field Three Description"
+      , type_ = DateField
       , allowAdditionalOptions = True
       , defaultValue = Nothing
       , readOnly = False
@@ -125,8 +124,8 @@ dummyFields =
       , label = "Boolean Field"
       , name = "boolean_field"
       , description = "Field Four Description"
-      , instructions = "Field Four Description"
-      , type' = BooleanField
+      , instructions = Just "Field Four Description"
+      , type_ = BooleanField
       , allowAdditionalOptions = True
       , defaultValue = Nothing
       , readOnly = False

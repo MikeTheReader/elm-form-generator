@@ -27,7 +27,7 @@ It is a re-implementation of a React/Redux project I did at https://github.com/M
 
 This will start a server on your local machine at the default port of 4000. Point your browser at http://localhost:4000, and you can see the application.
 
-If there is no REST API from the https://github.com/MikeTheReader/redux-field-creator running on port 8001, you will see dummy data, but you'll be able to see the application
+If there is no REST API from the https://github.com/MikeTheReader/redux-field-creator running on port 8000, you will see dummy data, but you'll be able to see the application
 function.
 
 ## Notes
